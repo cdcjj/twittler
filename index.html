@@ -4,6 +4,10 @@
     <meta charset="utf-8">
     <title>Twittler</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="jquery.js"></script>
+    <script src="data_generator.js"></script>
+    <script src="timestamp.js"></script>
+    <script src="jquery.timeago.js"></script>
   </head>
   <body>
 
@@ -11,18 +15,18 @@
 
     <header>
       <h1>Twittler</h1>
+      <h3>Welcome, Visitor!</h3>
+      <h4 class="dateToday"></h4>
     </header>
 
+    <!-- New Tweet Alert -->
     <section> 
-      <div class="btn" id='newTweets'>No new tweets</div>
+      <div id='newTweets'><strong>No new tweets</strong></div>
     </section>
 
+    <!-- Tweet Feed -->
     <section class="feed"></section>
 
-    <script src="jquery.js"></script>
-    <script src="data_generator.js"></script>
-    <script src="timestamp.js"></script>
-    <script src="jquery.timeago.js"></script>
     <script>
     window.visitor;
 
@@ -37,15 +41,29 @@
         var totalPosted = streams.home.length;
         var newTweetTotal = 0;
 
+        var today = function() {
+          var todayDate = formatDate(new Date());
+          $('.dateToday').text(todayDate);
+
+          setTimeout(function() {
+            today();
+          }, 7.2e+6);
+        }
+        today();        
 
         // Displays 11 tweets at page load
         var displayATweet = function(index) {
           var tweet = streams.home[index];
           // var timestamp =
-          var $tweet = $('<a><img class="avatar" src="images/' + tweet.user + '.jpg"></a><div><p class="user">@' + tweet.user + ':<br></p><p class="message">' + tweet.message + '<br>' + tweet.created_at + '</p></div>');
-          // $tweet.text('@' + tweet.user + ': ' + tweet.message);
+          var $tweet = $('<a><img class="avatar" src="images/' + tweet.user + 
+            '.jpg"></a><div class="tweets"><p class="user">@' + tweet.user + 
+            ':<br></p><p class="message">' + tweet.message + 
+            '</p><br><p class="timestamp">' + tweet.created_at + 
+            '</p></div>');
+
           $tweet.prependTo($tweetfeed);
-          $tweet.animate({'opacity' : '1'}, 'slow');
+          $tweet.animate({'opacity' : '1'}, 1000);
+
         };
 
         var index = streams.home.length - 1;
@@ -92,10 +110,11 @@
         })
 
 
-
       });
 
     </script>
   </body>
-  <footer></footer>
+  <footer class="primary-footer">
+    <small>&copy; Twittler: recreation of Twitter for Hack Reactor Pre-Course</small>
+  </footer>
 </html>
