@@ -56,6 +56,9 @@ table {
 body {
 	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color: #2B2C43;
+	margin: 0 auto;
+	width: 750px;
+	background: #F5B27F;
 }
 
 
@@ -64,12 +67,32 @@ body {
 	Typography
 	===============================================
 */
+header {
+	padding: 1em;
+	position: relative;
+}
+
+h1, h3, h4 {
+	margin-bottom: 5px;
+}
 
 h1 {
 	font-size: 50px;
-	line-height: 44px;
-	margin-bottom: 22px;
+	line-height: 52px;
 	color: #38D7FF;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+h3 {
+	font-size: 30px;
+	line-height: 32px;
+	color: black;
+}
+
+h4 {
+	font-size: 20px;
+	line-height: 22px;
+	color: black;
 }
 
 strong {
@@ -85,6 +108,7 @@ strong {
 
 #newTweets {
 	cursor: pointer;
+	font-size: 18px;
 	padding: 5px;
 	display: block;
 	background: #EDEBB4;
@@ -97,23 +121,57 @@ strong {
 */
 
 .feed {
-	opacity: 1;
 	padding: 10px;
 	display: block;
+	background: white;
 	-webkit-border-radius: 10px;
 	   -moz-border-radius: 10px;
 	        border-radius: 10px;
-	border-top: 10px dotted rgba(0, 132, 180, 0.5);	
+	border-top: 10px dotted rgba(0, 132, 180, 0.5);
 }
 .avatar {
+	padding-top: 10px;
 	height: 45px;
 	width: 45px;
 	padding-right: 10px;
-	align-content: left;
+	float: left;
+}
+
+.tweets {
+	opacity: 0;
+	font-family: Arial;
+	display: block;
+}
+
+.user {
+	font-weight: 600;	
 }
 
 .message {
 	font-size: 20px;
-	font-family: Arial;
-	border-bottom: 1px solid #2D2855;
+}
+
+.timestamp {
+	color: #7B7B7B;
+	font-size: 12px;
+	font-style: italic;
+	font-family: sans-serif;
+	border-bottom: 1.5px solid #2D2855;
+}
+
+/*
+	===============================================
+	Primary footer
+	===============================================
+*/
+
+.primary-footer {
+	font-size: 13px;
+	padding-bottom: 30px;
+	padding-top: 30px;
+}
+
+.primary-footer small {
+	float: left;
+	font-weight: 400;
 }
