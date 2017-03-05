@@ -61,6 +61,29 @@ body {
 	background: #F5B27F;
 }
 
+.logo {
+	border-radius: 70%;
+	height: 45px;
+}
+
+/*
+	===============================================
+	Clearfix
+	===============================================
+*/
+
+.group:before,
+.group:after {
+	content: "";
+	display: table;
+}
+.group:after{
+	clear:both;
+}
+.group{
+	clear: both;
+	*zoom: 1;
+}
 
 /*
 	===============================================
@@ -105,13 +128,23 @@ strong {
 	Buttons
 	===============================================
 */
-
-#newTweets {
+#newTweets, .allUsers {
 	cursor: pointer;
 	font-size: 18px;
 	padding: 5px;
 	display: block;
+}
+
+#newTweets {
 	background: #EDEBB4;
+}
+
+.allUsers {
+	font-weight: 500;
+	background-color: #EA9693;
+	padding: 11px 30px;
+	border-radius: 5px;
+	width: 110px;
 }
 
 /*
@@ -135,16 +168,19 @@ strong {
 	width: 45px;
 	padding-right: 10px;
 	float: left;
+	clear: both;
 }
 
 .tweets {
 	opacity: 0;
 	font-family: Arial;
 	display: block;
+	border-bottom: 1.5px solid #2D2855;
 }
 
 .user {
-	font-weight: 600;	
+	font-weight: 600;
+	padding-bottom: 4px;	
 }
 
 .message {
@@ -156,7 +192,9 @@ strong {
 	font-size: 12px;
 	font-style: italic;
 	font-family: sans-serif;
-	border-bottom: 1.5px solid #2D2855;
+	float: right;
+	vertical-align: top;
+	clear: both;
 }
 
 /*
