@@ -14,18 +14,26 @@
     <!-- Header -->
 
     <header>
-      <h1>Twittler</h1>
+      <h1>
+        <img class="logo" src="images/logo.jpg" alt="Twittler corgi logo">Twittler
+      </h1>
       <h3>Welcome, Visitor!</h3>
       <h4 class="dateToday"></h4>
     </header>
 
+    <section>
+      <div class="allUsers">See All Users</div>
+    </section>
     <!-- New Tweet Alert -->
     <section> 
       <div id='newTweets'><strong>No new tweets</strong></div>
     </section>
 
     <!-- Tweet Feed -->
-    <section class="feed"></section>
+    <section class="feed master"></section>
+
+    <!-- User Feed -->
+    <section class="feed user-feed"></section>
 
     <script>
     window.visitor;
@@ -34,11 +42,20 @@
         // jQuery("time.timeago").timeago();
 
         // DOM shortcuts
-        var $tweetfeed = $('.feed');
-        // var $newTweets = $('#newTweets');
+        var $tweetfeed = $('.master');
+        var $newTweets = $('#newTweets');
+        var $userFeed = $('.user-feed');
+        var $allUsers = $('.allUsers');
+        var tweetsArray;
+        var seeAll = true;
 
-        var notPostedTw = 0;
-        var totalPosted = streams.home.length;
+
+        if (seeAll) {
+          tweetsArray = streams.home;
+          $allUsers.hide();
+        }
+
+        var totalPosted = tweetsArray.length;
         var newTweetTotal = 0;
 
         var today = function() {
@@ -52,43 +69,57 @@
         today();        
 
         // Displays 11 tweets at page load
-        var displayATweet = function(index) {
-          var tweet = streams.home[index];
+        var displayEachTweet = function(oneTweet, all) {
+          var tweet = oneTweet;
+
           // var timestamp =
-          var $tweet = $('<a><img class="avatar" src="images/' + tweet.user + 
-            '.jpg"></a><div class="tweets"><p class="user">@' + tweet.user + 
-            ':<br></p><p class="message">' + tweet.message + 
+          var $tweet = $('<div class="tweets group"><img class="avatar" src="images/' + tweet.user + 
+            '.jpg" alt="twittler user images">' + '<a href="#" class="user">@' + tweet.user + 
+            ':<br></a><p class="message">' + tweet.message + 
             '</p><br><p class="timestamp">' + tweet.created_at + 
             '</p></div>');
 
-          $tweet.prependTo($tweetfeed);
+          if (all) {
+            $tweet.prependTo($tweetfeed);
+          }else {
+            $tweet.prependTo($userFeed);
+          }
+
           $tweet.animate({'opacity' : '1'}, 1000);
 
         };
 
-        var index = streams.home.length - 1;
-        while (index >= 0) {
-          var newTweet = displayATweet(index);
-          index -= 1;
+        var displayTweets = function(tweetArr, allTw) {
+          var index = tweetArr.length - 1;
+          while (index >= 0) {
+            displayEachTweet(tweetArr[index], allTw);
+            index -= 1;
+          }
+
+          if (allTw) {
+            $userFeed.hide();
+          }
         }
-        
+
+        displayTweets(tweetsArray, seeAll);
+       
 
         // Initialize checkNewTweets();
         var checkNewTweets = function() {
           // Check current tweet count;
-          newTweetTotal = streams.home.length;
+          newTweetTotal = tweetsArray.length;
           notPostedTw = newTweetTotal - totalPosted;
 
           // display or hide newTweet message
           if (notPostedTw > 0) {
-            $('#newTweets').fadeIn();
-            $('#newTweets').text("Click to see " + notPostedTw + " new tweets.");
+            $newTweets.fadeIn();
+            $newTweets.text("Click to see " + notPostedTw + " new tweets.");
           // }
           } else{
-            $('#newTweets').hide();
+            $newTweets.hide();
           }
 
-          // recursion--- check for new tweets every 2 minutes (120000ms)
+          // recursion--- check for new tweets
           setTimeout(function() {
             checkNewTweets();
           }, 6000);
@@ -97,21 +128,47 @@
 
         var showNewTweets = function() {
           for (var i = totalPosted; i < newTweetTotal; i++){
-            displayATweet(i);
+            displayEachTweet(tweetsArray[i], seeAll);
           }
 
           // update variables and hide newTweet button
           totalPosted = newTweetTotal;
-          $('#newTweets').hide();
+          $newTweets.hide();
         }
 
-        $('#newTweets').on('click', function() {
+        $newTweets.on('click', function() {
           showNewTweets();
         })
 
+        // filter feed by username
+        $tweetfeed.on('click', '.user', function(event) {
+          // event.stopPropagation();
+          // event.preventDefault();
+          var $username = $(this).text().slice(1, -1);
+          console.log('chosen user:' + $username);
+          seeAll = false;
+          tweetsArray = streams.users[$username];
+          displayTweets(tweetsArray, seeAll);
+          
+          $tweetfeed.hide();
+          $userFeed.show();
+          $allUsers.show();
+          checkNewTweets();
+
+        })
+
+        $allUsers.on('click', function(event) {
+          // event.stopPropagation();
+          // event.preventDefault();
+          seeAll = true;
+          tweetsArray = streams.home;
+          
+          $userFeed.hide();
+          $tweetfeed.show();
+          $allUsers.hide();
+        })
 
       });
-
     </script>
   </body>
   <footer class="primary-footer">
