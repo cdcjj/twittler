@@ -1,27 +1,101 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="jquery.js"></script>
-    <script src="data_generator.js"></script>
+    <meta charset="utf-8">
+    <title>Twittler</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+
+    <!-- Header -->
+
+    <header>
+      <h1>Twittler</h1>
+    </header>
+
+    <section> 
+      <div class="btn" id='newTweets'>No new tweets</div>
+    </section>
+
+    <section class="feed"></section>
+
+    <script src="jquery.js"></script>
+    <script src="data_generator.js"></script>
+    <script src="timestamp.js"></script>
+    <script src="jquery.timeago.js"></script>
     <script>
+    window.visitor;
 
       $(document).ready(function(){
-        var $body = $('body');
-        $body.html('');
+        // jQuery("time.timeago").timeago();
+
+        // DOM shortcuts
+        var $tweetfeed = $('.feed');
+        // var $newTweets = $('#newTweets');
+
+        var notPostedTw = 0;
+        var totalPosted = streams.home.length;
+        var newTweetTotal = 0;
+
+
+        // Displays 11 tweets at page load
+        var displayATweet = function(index) {
+          var tweet = streams.home[index];
+          // var timestamp =
+          var $tweet = $('<a><img class="avatar" src="images/' + tweet.user + '.jpg"></a><div><p class="user">@' + tweet.user + ':<br></p><p class="message">' + tweet.message + '<br>' + tweet.created_at + '</p></div>');
+          // $tweet.text('@' + tweet.user + ': ' + tweet.message);
+          $tweet.prependTo($tweetfeed);
+          $tweet.animate({'opacity' : '1'}, 'slow');
+        };
 
         var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
+        while (index >= 0) {
+          var newTweet = displayATweet(index);
           index -= 1;
         }
+        
+
+        // Initialize checkNewTweets();
+        var checkNewTweets = function() {
+          // Check current tweet count;
+          newTweetTotal = streams.home.length;
+          notPostedTw = newTweetTotal - totalPosted;
+
+          // display or hide newTweet message
+          if (notPostedTw > 0) {
+            $('#newTweets').fadeIn();
+            $('#newTweets').text("Click to see " + notPostedTw + " new tweets.");
+          // }
+          } else{
+            $('#newTweets').hide();
+          }
+
+          // recursion--- check for new tweets every 2 minutes (120000ms)
+          setTimeout(function() {
+            checkNewTweets();
+          }, 6000);
+        }
+        checkNewTweets();
+
+        var showNewTweets = function() {
+          for (var i = totalPosted; i < newTweetTotal; i++){
+            displayATweet(i);
+          }
+
+          // update variables and hide newTweet button
+          totalPosted = newTweetTotal;
+          $('#newTweets').hide();
+        }
+
+        $('#newTweets').on('click', function() {
+          showNewTweets();
+        })
+
+
 
       });
 
     </script>
   </body>
+  <footer></footer>
 </html>
