@@ -66,6 +66,34 @@ body {
 	height: 45px;
 }
 
+.feed-type{
+	font-weight: 550;
+	font-color: #555ADE;
+	text-shadow: -1px 0 blue, 0 1px blue /*1px 0 black, 0 -1px black*/;
+}
+
+a {
+  color: #38228F;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover {
+  color: #C743CC;
+}
+
+textarea {
+	display: inline-block;
+	height: 60px;
+	width: 735px;
+	background-color: rgba(254, 252, 254, .25);
+	padding: 4px 5px;
+	border: 2px solid black;
+	-webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+}
+
 /*
 	===============================================
 	Clearfix
@@ -122,13 +150,17 @@ strong {
 	font-weight: 400;
 }
 
+label {
+	font-weight: 700;
+	display: block;
+}
 
 /*
 	===============================================
 	Buttons
 	===============================================
 */
-#newTweets, .allUsers {
+#newTweets, .allUsers, .btn-send {
 	cursor: pointer;
 	font-size: 18px;
 	padding: 5px;
@@ -147,6 +179,14 @@ strong {
 	width: 110px;
 }
 
+.btn-send {
+	background: #55BFDE;
+	padding: 11px 4px;
+	border-radius: 5px;
+	width: 200px;
+	float: right;
+	clear: both;
+}
 /*
 	===============================================
 	Tweets
