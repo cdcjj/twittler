@@ -19,10 +19,19 @@
       </h1>
       <h3>Welcome, Visitor!</h3>
       <h4 class="dateToday"></h4>
+      <h5 class="feed-type">Home Feed</h5>
     </header>
 
     <section>
       <div class="allUsers">See All Users</div>
+    </section>
+      
+    <section class="group">
+      <div class="write">
+        <label for="message">Write a tweet</label>
+        <textarea id="message" name="message">Write a tweet</textarea>
+      </div>
+      <button class="btn-send">Tweet Message</button>
     </section>
     <!-- New Tweet Alert -->
     <section> 
@@ -39,7 +48,7 @@
     window.visitor;
 
       $(document).ready(function(){
-        // jQuery("time.timeago").timeago();
+        jQuery(".timeago").timeago();
 
         // DOM shortcuts
         var $tweetfeed = $('.master');
@@ -72,12 +81,11 @@
         var displayEachTweet = function(oneTweet, all) {
           var tweet = oneTweet;
 
-          // var timestamp =
-          var $tweet = $('<div class="tweets group"><img class="avatar" src="images/' + tweet.user + 
+          // var timeAgo = jQuery.timeago(tweet.created_at.toISOString());
+          var $tweet = $('<div class="tweets group timeago" title=timeAgo><img class="avatar" src="images/' + tweet.user + 
             '.jpg" alt="twittler user images">' + '<a href="#" class="user">@' + tweet.user + 
             ':<br></a><p class="message">' + tweet.message + 
-            '</p><br><p class="timestamp">' + tweet.created_at + 
-            '</p></div>');
+            '</p><br><p class="timestamp"><span id="time">' + tweet.created_at + '</span></p></div>');
 
           if (all) {
             $tweet.prependTo($tweetfeed);
@@ -140,15 +148,30 @@
           showNewTweets();
         })
 
+        // var updateTimeStamp= function() {
+        //   var arrLength = $('div.tweets').length;
+        //   $('div.tweets').each(function(index) {
+
+        //     var timeAgo = jQuery.timeago(tweetsArray[index].text());
+        //     $(this).filter('p.timestamp').text(timeAgo);
+        //   })
+
+        //   setTimeout(function() {
+        //     updateTimeStamp();
+        //   }, 60000);
+        // }
+
+        // updateTimeStamp();
+
         // filter feed by username
         $tweetfeed.on('click', '.user', function(event) {
           // event.stopPropagation();
           // event.preventDefault();
           var $username = $(this).text().slice(1, -1);
-          console.log('chosen user:' + $username);
           seeAll = false;
           tweetsArray = streams.users[$username];
           displayTweets(tweetsArray, seeAll);
+          $(".feed-type").text($username + "'s Page Feed");
           
           $tweetfeed.hide();
           $userFeed.show();
@@ -162,11 +185,28 @@
           // event.preventDefault();
           seeAll = true;
           tweetsArray = streams.home;
+          $(".feed-type").text('Home Feed');
           
           $userFeed.hide();
           $tweetfeed.show();
           $allUsers.hide();
         })
+
+        $('.btn-send').on('click', function() {
+          var writtenTweet = {}
+          visitor = 'visitor';
+          var message = $('#message').val();
+          if (visitor.length && message.length) {
+            writtenTweet.user = 'visitor';
+            streams.users[writtenTweet.user] = [];
+            writtenTweet.message = message;
+            writtenTweet.created_at = new Date();
+            streams.users[writtenTweet.user].push(writtenTweet);
+            streams.home.push(writtenTweet);
+
+            $('label').text('Your message has been saved and tweeted. To write a new tweet, erase the previous message in the tweet box.');
+          }
+        });
 
       });
     </script>
